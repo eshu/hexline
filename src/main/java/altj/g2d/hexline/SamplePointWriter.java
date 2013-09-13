@@ -17,7 +17,7 @@ public final class SamplePointWriter implements PointWriter, AutoCloseable {
         StringBuilder header = new StringBuilder();
         header.append("<?xml version=\"1.0\" standalone=\"no\"?>\n")
                 .append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n")
-                .append("<svg width=\"20cm\" height=\"20cm\" viewBox=\"0 0 1000 1000\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n")
+                .append("<svg width=\"40cm\" height=\"40cm\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n")
                 .append("<desc>Line</desc>\n");
         stream.print(header.toString());
     }

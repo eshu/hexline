@@ -51,12 +51,15 @@ public final class Hexagon {
             shape.append(defaultStrokeColor).append("\" fill=\"").append(defaultFillColor);
         }
         shape.append("\" points=\"");
+        double centerX = offsetX + width * (center.y % 2 + 1) + 2 * width * center.x;
+        double centerY = offsetY + height + 2 * height * center.y;
         for (int i = 0; i < 6; i++) {
-            final double x = offsetX + width * (center.y % 2 + 1) + 2 * width * center.x + vertexX[i];
-            final double y = offsetY + height + 2 * height * center.y + vertexY[i];
+            final double x = centerX + vertexX[i];
+            final double y = centerY + vertexY[i];
             shape.append(String.format("%.4f,%.4f ", x, y));
         }
         shape.append("\"/>\n");
+        shape.append(String.format("<text x=\"%.4f\" y=\"%.4f\" text-anchor=\"middle\" dominant-baseline=\"middle\">%d, %d</text>", centerX, centerY, center.x, center.y));
         stream.print(shape.toString());
     }
 }
