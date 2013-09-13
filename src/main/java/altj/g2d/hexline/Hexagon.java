@@ -29,7 +29,7 @@ public final class Hexagon {
             vertexX[i] = scale * radius * unscaledVertexX[i];
             vertexY[i] = scale * radius * unscaledVertexY[i];
         }
-        height = radius;
+        height = radius * 0.75;
         width = cos30 * radius;
         this.offsetX = offsetX;
         this.offsetY = offsetY;

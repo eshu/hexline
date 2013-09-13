@@ -45,36 +45,29 @@ public final class Line implements Shape {
     }
 
     private class ShiftedLineIterator implements Iterator<Point> {
-        private Point point = null;
-        private int d = 0;
-        private int rest;
-
-        private ShiftedLineIterator() {
-            rest = dx;
-        }
+        private int x = 0;
+        private int y = 0;
+        private int error = 0;
 
         @Override
         public boolean hasNext() {
-            return (point == null) || (rest != 0);
+            return x <= dx;
         }
 
         @Override
         public Point next() {
-            if (point == null) {
-                point = begin;
-                return point;
-            }
-            if (rest == 0)
+            if (x > dx)
                 return null;
-            rest--;
-            d = d + dy;
-            if (2 * d < dx) {
-                point = new Point(point.x + 1, point.y);
-            } else {
-                d -= dx;
-                point = new Point(point.x + 1, point.y + 1);
+            Point point = new Point(begin.x + (x - (y + 1) / 2) * sx, begin.y + y * sy);
+            x++;
+            if (x <= dx) {
+                error += dy;
+                if (2 * error >= dx) {
+                    y++;
+                    error -= dx;
+                }
             }
-            return new Point(begin.x + (point.x - (point.y + 1) / 2) * sx, begin.y + point.y * sy);
+            return point;
         }
 
         @Override
@@ -84,36 +77,29 @@ public final class Line implements Shape {
     }
 
     private class LineIterator implements Iterator<Point> {
-        private Point point = null;
-        private int d = 0;
-        private int rest;
-
-        private LineIterator() {
-            rest = dy;
-        }
+        private int x = 0;
+        private int y = 0;
+        private int error = 0;
 
         @Override
         public boolean hasNext() {
-            return (point == null) || (rest != 0);
+            return y <= dy;
         }
 
         @Override
         public Point next() {
-            if (point == null) {
-                point = begin;
-                return point;
-            }
-            if (rest == 0)
+            if (y > dy)
                 return null;
-            rest--;
-            d = d + dx;
-            if (2 * d < dy) {
-                point = new Point(point.x, point.y + 1);
-            } else {
-                d -= dy;
-                point = new Point(point.x + 1, point.y + 1);
+            Point point = new Point(begin.x + x * sx, begin.y + y * sy);
+            y++;
+            if (y <= dy) {
+                error = error + dx;
+                if ((2 * error >= dy) && ((y & 1) == 0)) {
+                    error -= dy;
+                    x++;
+                }
             }
-            return new Point(begin.x + point.x * sx, begin.y + point.y * sy);
+            return point;
         }
 
         @Override
