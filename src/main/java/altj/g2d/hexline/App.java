@@ -6,21 +6,19 @@ import java.io.PrintStream;
 
 public class App {
     public static void main(String[] args) throws IOException {
-        if (args.length < 7) {
+        if (args.length < 5) {
             usage();
             return;
         }
         int width = parse("width", args[1]);
         int height = parse("height", args[2]);
-        int x1 = parse("x1", args[3]);
-        int y1 = parse("y1", args[4]);
-        int x2 = parse("x2", args[5]);
-        int y2 = parse("y2", args[6]);
+        int x = parse("x1", args[3]);
+        int y = parse("y1", args[4]);
         FileOutputStream fos = new FileOutputStream(args[0]);
         SampleRaster raster = new SampleRaster(width, height);
         SamplePointWriter writer = new SamplePointWriter(new PrintStream(fos), 10, 5, 5);
         writer.init();
-        Line line = new Line(new Point(x1, y1), new Point(x2, y2));
+        Line line = new Line(new Point(0, 0), new Point(x, y));
         raster.draw(line);
         raster.write(writer);
         writer.close();
@@ -38,6 +36,6 @@ public class App {
     }
 
     private static void usage() {
-        System.err.println("Arguments: filename width height x1 y1 x2 y2");
+        System.err.println("Arguments: filename width height x y");
     }
 }

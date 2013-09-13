@@ -9,6 +9,7 @@ public final class Line implements Shape {
     private final int dy;
     private final int sx;
     private final int sy;
+    private final boolean shifted;
 
     public Line(final Point begin, final Point end) {
         this.begin = begin;
@@ -27,21 +28,28 @@ public final class Line implements Shape {
         } else {
             sy = 1;
         }
-        this.dx = dx + dy;
+        int cdx = dx + (dy + 1) / 2;
+        if (cdx >= dy) {
+            this.dx = cdx;
+            shifted = true;
+        } else {
+            this.dx = dx;
+            shifted = false;
+        }
         this.dy = dy;
     }
 
     @Override
     public Iterator<Point> iterator() {
-        return new LineIterator();
+        return shifted ? new ShiftedLineIterator() : new LineIterator();
     }
 
-    private class LineIterator implements Iterator<Point> {
+    private class ShiftedLineIterator implements Iterator<Point> {
         private Point point = null;
         private int d = 0;
         private int rest;
 
-        private LineIterator() {
+        private ShiftedLineIterator() {
             rest = dx;
         }
 
@@ -60,13 +68,52 @@ public final class Line implements Shape {
                 return null;
             rest--;
             d = d + dy;
-            if (d > dx) {
-                d %= dx;
-                point = new Point(point.x + 1, point.y + 1);
-            } else {
+            if (2 * d < dx) {
                 point = new Point(point.x + 1, point.y);
+            } else {
+                d -= dx;
+                point = new Point(point.x + 1, point.y + 1);
             }
-            return new Point(begin.x + (point.x - point.y) * sx, begin.y + point.y * sy);
+            return new Point(begin.x + (point.x - (point.y + 1) / 2) * sx, begin.y + point.y * sy);
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    private class LineIterator implements Iterator<Point> {
+        private Point point = null;
+        private int d = 0;
+        private int rest;
+
+        private LineIterator() {
+            rest = dy;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return (point == null) || (rest != 0);
+        }
+
+        @Override
+        public Point next() {
+            if (point == null) {
+                point = begin;
+                return point;
+            }
+            if (rest == 0)
+                return null;
+            rest--;
+            d = d + dx;
+            if (2 * d < dy) {
+                point = new Point(point.x, point.y + 1);
+            } else {
+                d -= dy;
+                point = new Point(point.x + 1, point.y + 1);
+            }
+            return new Point(begin.x + point.x * sx, begin.y + point.y * sy);
         }
 
         @Override
