@@ -9,7 +9,6 @@ public final class Line implements Shape {
     private final int dy;
     private final int sx;
     private final int sy;
-    private final boolean shifted;
 
     public Line(final Point begin, final Point end) {
         this.begin = begin;
@@ -28,23 +27,16 @@ public final class Line implements Shape {
         } else {
             sy = 1;
         }
-        int cdx = dx + (dy + 1) / 2;
-        if (cdx >= dy) {
-            this.dx = cdx;
-            shifted = true;
-        } else {
-            this.dx = dx;
-            shifted = false;
-        }
+        this.dx = dx + (dy + 1) / 2;
         this.dy = dy;
     }
 
     @Override
     public Iterator<Point> iterator() {
-        return shifted ? new ShiftedLineIterator() : new LineIterator();
+        return dx > dy ? new LineIterator1() : new LineIterator2();
     }
 
-    private class ShiftedLineIterator implements Iterator<Point> {
+    private final class LineIterator1 implements Iterator<Point> {
         private int x = 0;
         private int y = 0;
         private int error = 0;
@@ -60,7 +52,7 @@ public final class Line implements Shape {
                 return null;
             Point point = new Point(begin.x + (x - (y + 1) / 2) * sx, begin.y + y * sy);
             x++;
-            if (x <= dx) {
+            if (hasNext()) {
                 error += dy;
                 if (2 * error >= dx) {
                     y++;
@@ -76,7 +68,7 @@ public final class Line implements Shape {
         }
     }
 
-    private class LineIterator implements Iterator<Point> {
+    private final class LineIterator2 implements Iterator<Point> {
         private int x = 0;
         private int y = 0;
         private int error = 0;
@@ -90,11 +82,11 @@ public final class Line implements Shape {
         public Point next() {
             if (y > dy)
                 return null;
-            Point point = new Point(begin.x + x * sx, begin.y + y * sy);
+            Point point = new Point(begin.x + (x - (y + 1) / 2) * sx, begin.y + y * sy);
             y++;
-            if (y <= dy) {
+            if (hasNext()) {
                 error = error + dx;
-                if ((2 * error >= dy) && ((y & 1) == 0)) {
+                if (2 * error >= dy) {
                     error -= dy;
                     x++;
                 }

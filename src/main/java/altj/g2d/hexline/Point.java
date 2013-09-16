@@ -1,14 +1,5 @@
-/*
- * Point.java
- * Copyright 2013 USETECH 
- */
 package altj.g2d.hexline;
 
-/**
- * @author Павел Пархоменко
- * @version $Id$
- *
- */
 public final class Point {
     public final int x;
     public final int y;

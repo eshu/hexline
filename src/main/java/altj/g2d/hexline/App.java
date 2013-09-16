@@ -18,8 +18,8 @@ public class App {
         SampleRaster raster = new SampleRaster(width, height);
         SamplePointWriter writer = new SamplePointWriter(new PrintStream(fos), 30, 5, 5);
         writer.init();
-        //Line line = new Line(new Point(0, 0), new Point(x, y));
-        //raster.draw(line);
+        Line line = new Line(new Point(0, 0), new Point(x, y));
+        raster.draw(line);
         raster.write(writer);
         writer.close();
         fos.close();

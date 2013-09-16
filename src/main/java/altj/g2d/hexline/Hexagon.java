@@ -7,7 +7,7 @@ public final class Hexagon {
     private static final String defaultStrokeColor = "#808080";
     private static final String defaultFillColor = "#FFFFFF";
     private static final String drawnStrokeColor = "#000000";
-    private static final String drawnFillColor = "#808080";
+    private static final String drawnFillColor = "#C0C0C0";
 
     private static final double sin30 = 1d / 2;
     private static final double cos30 = Math.sqrt(3) / 2;
@@ -59,7 +59,9 @@ public final class Hexagon {
             shape.append(String.format("%.4f,%.4f ", x, y));
         }
         shape.append("\"/>\n");
-        shape.append(String.format("<text x=\"%.4f\" y=\"%.4f\" text-anchor=\"middle\" dominant-baseline=\"middle\">%d, %d</text>", centerX, centerY, center.x, center.y));
+        shape.append(String
+                .format("<text x=\"%.4f\" y=\"%.4f\" text-anchor=\"middle\" dominant-baseline=\"middle\">%d, %d</text>",
+                        centerX, centerY, center.x, center.y));
         stream.print(shape.toString());
     }
 }
