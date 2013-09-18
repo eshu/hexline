@@ -52,7 +52,7 @@ public final class Line implements Shape {
                 return null;
             Point point = new Point(begin.x + (x - (y + 1) / 2) * sx, begin.y + y * sy);
             x++;
-            if (hasNext()) {
+            if (x <= dx) {
                 error += dy;
                 if (2 * error >= dx) {
                     y++;
@@ -84,7 +84,7 @@ public final class Line implements Shape {
                 return null;
             Point point = new Point(begin.x + (x - (y + 1) / 2) * sx, begin.y + y * sy);
             y++;
-            if (hasNext()) {
+            if (y <= dy) {
                 error = error + dx;
                 if (2 * error >= dy) {
                     error -= dy;
